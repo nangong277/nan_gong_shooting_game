@@ -18,6 +18,9 @@ using namespace DirectX;
 #include "mouse.h"
 #include "game.h"
 
+
+//test这是测试github是否正常呢
+
 /*----------------------------------------------------------------------
 横着是 x % 5
 竖着是 x / 5
