@@ -1,0 +1,76 @@
+# ========== Visual Studio ==========
+
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.VC.db
+*.VC.opendb
+*.ipch
+
+# ========== Build Output ==========
+
+Debug/
+Release/
+x64/
+build/
+*.obj
+*.pdb
+*.ilk
+*.log
+*.tlog
+*.cache
+*.aps
+*.ncb
+
+# ========== C++ 编译临时文件 ==========
+
+*.exe
+*.dll
+*.lib
+*.exp
+*.idb
+*.res
+
+# ========== CMake（如用） ==========
+
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+
+# ========== DirectXTex 编译缓存（如果生成过） ==========
+
+DirectXTex*/Debug/
+DirectXTex*/Release/
+
+# ========== 通用忽略 ==========
+
+*.tmp
+*.bak
+*.swp
+*.old
+
+# ========== 项目外配置 ==========
+
+*.opensdf
+*.sdf
+*.sbr
+*.db
+*.db-wal
+*.db-shm
+
+# ========== Visual Studio Code（如偶尔用 VSCode） ==========
+
+.vscode/
+
+
+
+
+# 忽略 VS IntelliSense 缓存
+.vs/
+*.ipch
+*.VC.db
+*.sdf
+*.opensdf
