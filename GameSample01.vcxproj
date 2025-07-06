@@ -140,7 +140,6 @@
     <ClCompile Include="debug_ostream.cpp" />
     <ClCompile Include="debug_text.cpp" />
     <ClCompile Include="direct3d.cpp" />
-    <ClCompile Include="enemy.cpp" />
     <ClCompile Include="game.cpp" />
     <ClCompile Include="game_window.cpp" />
     <ClCompile Include="keyboard.cpp" />
@@ -163,7 +162,6 @@
     <ClInclude Include="direct3d.h" />
     <ClInclude Include="DirectXTex.h" />
     <ClInclude Include="bullet.h" />
-    <ClInclude Include="enemy.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="game_window.h" />
     <ClInclude Include="keyboard.h" />

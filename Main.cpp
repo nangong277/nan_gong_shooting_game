@@ -19,21 +19,6 @@ using namespace DirectX;
 #include "game.h"
 
 
-//test这是测试github是否正常呢
-
-/*----------------------------------------------------------------------
-横着是 x % 5
-竖着是 x / 5
-
-提出文件要求
-。exe
-。cso 两个
-使用中的texture file
-
-更改文件路径  最外部文件夹名/下一级文件夹名/“素材名.文件格式”
-
-main function
-------------------------------------------------------------------------*/
 
 
 //void ProcessInput(UINT message, WPARAM wParam, float& acc, bool& isjumped);
@@ -112,9 +97,7 @@ int APIENTRY WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
 			//fps 計測用
 			current_time = SystemTimer_GetTime(); //最新时间
 			double elapsed_time = current_time - fps_last_time; //fps計測用の経つ時間を計算    
-			/*，在每个循环迭代中，current_time 会随着时间的推移不断更新，而 fps_last_time 只有在进行FPS计算后才会更新。这种设计允许代码在每经过一秒时计算一次FPS，而不是在每个帧都计算。
 
-			这样做的目的是为了计算每秒的帧数（FPS），而不是每帧的帧数。通过这种方式，程序可以在每秒结束时计算出当前的平均帧率，并在下一个秒周期开始时重置帧计数。*/
 
 			if (elapsed_time >= 1.0)
 			{
@@ -185,5 +168,4 @@ int APIENTRY WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
 	Mouse_Finalize();
 	return (int)msg.wParam;
 
-}
-
+};
