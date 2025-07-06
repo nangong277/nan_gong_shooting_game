@@ -37,9 +37,9 @@ void Game_Finalize()
 
 void Game_Update(double elapsed_time)
 {
-	if (g_Time - g_CreateTime > 2.0f)
+	if (g_Time - g_CreateTime >= 2.0f)
 	{
-		Enemy_Create({ENEMY_TYPE_NORMAL 1600.0f,450 - 32.0f });
+		Enemy_Create({ 1600.0f,450 - 32.0f });
 		g_CreateTime = g_Time;
 
 	}
