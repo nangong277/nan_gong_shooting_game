@@ -4,27 +4,35 @@
 // 敌人!  
 //
 //
-//
+//*====================================================
 
 #include "enemy.h"
-#include <DirectXMath.h>
+#include <DirectXMath.h>  //为了使用 XMFLOAT2, XMVECTOR
 using namespace DirectX;
-#include "texture.h"
-#include "sprite.h" 
+#include "texture.h"       //图片加载
+#include "sprite.h"     //精灵绘制
 
 
 struct Enemy
 {
-	XMFLOAT2 position;
-	XMFLOAT2 velocity;
-	bool isEnable;
+	XMFLOAT2 position;      //	敌人的当前位置
+	XMFLOAT2 velocity;      //	敌人的速度（单位是像素/秒）
+	bool isEnable;          // 敌人是否激活中（true = 在场，false = 空闲）
 
 };
 
-static constexpr unsigned int ENEMY_MAX = 256;
-static Enemy g_Enemys[ENEMY_MAX]{};
-static int g_EnemyTexId = -1;
-static constexpr float ENEMY_WIDTH = 64.0f;
+static constexpr unsigned int ENEMY_MAX = 256;     //敌人最大数量
+static Enemy g_Enemys[ENEMY_MAX]{};                //	所有敌人数组（最多 256 个）
+static int g_EnemyTexId = -1;                      //  加载贴图后的 ID，用来绘制敌人用
+static constexpr float ENEMY_WIDTH = 64.0f;        //敌人的宽度（用于判定“是否出屏幕”）
+
+
+
+
+
+
+//所有敌人标记为“未启用”
+//加载敌人贴图 "Boss.png" 并存入 g_EnemyTexId
 
 void Enemy_Initialize()
 {
@@ -85,7 +93,7 @@ void Enemy_Create(const DirectX::XMFLOAT2& position)
 
 		e.isEnable = true;
 		e.position = position;
-		e.velocity = { -160.0f,0.0f };
+		e.velocity = { -160.0f,0.0f };     //→ 设置敌人的速度为向左。
 		break;
 	}
 
