@@ -15,11 +15,16 @@
 #include "enemy.h"
 #include "enemy_spawner.h"
 
+
+void hitJudgmentBulletVSEnemy();
+void hitJudgmentPlayerVSEnemy();
+
 using namespace DirectX;
 
 
 static double g_Time = 0.0f;
 static double g_CreateTime = 0.0f;
+
 
 
 void Game_Initialize()
@@ -50,6 +55,53 @@ void Game_Update(double elapsed_time)
 	Player_Update(elapsed_time);
 	Bullet_Update(elapsed_time);
 	Enemy_Update(elapsed_time);
+	hitJudgmentBulletVSEnemy();
+	hitJudgmentPlayerVSEnemy();
+}
+
+void hitJudgmentBulletVSEnemy()
+{
+	for (int bi = 0; bi < BULLET_MAX; bi++)
+	{
+		
+		if (!Bullet_IsEnable(bi)) continue;
+
+		for (int ei = 0; ei < ENEMY_MAX; ei++)
+		{
+
+			if (!Enemy_IsEnable(ei)) continue;
+
+			if (Collision_IsOverlapCircle(
+				Bullet_GetCollision(bi),
+				Enemy_GetCollision(ei))
+			{
+				// ヒット〜
+				Bullet_Destroy(bi);
+				Enemy_Destroy(ei);
+			}
+		}
+	}
+}
+void hitJudgmentPlayerVSEnemy()
+{
+    if (!Player_IsEnable()) return;
+
+    for (int ei = 0; ei < ENEMY_MAX; ei++) {
+        if (!Enemy_IsEnable(ei)) continue;
+
+        if (Collision_IsOverlapCircle(
+            Bullet_GetCollision(bi),
+            Enemy_GetCollision(ei))) {
+
+            // ヒット～
+            Bullet_Destroy(bi);
+            Enemy_Destroy(ei);
+        }
+    }
+}
+
+
+
 
 }
 
@@ -58,4 +110,5 @@ void Game_Draw()
 	Enemy_Draw();
 	Bullet_Draw();
 	Player_Draw();
-}
+
+}　

@@ -3,8 +3,8 @@
 #include "direct3d.h"
 #include "texture.h"
 #include "sprite.h" 
+#include "collision.h" 
 using namespace DirectX;
-
 
 
 struct Bullet
@@ -13,10 +13,10 @@ struct Bullet
 	XMFLOAT2 velocity;
 	double lifeTime;
 	bool isEnable;
+	Circle collision;
 };
 
 
-static constexpr unsigned int BULLET_MAX = 1024;
 
 static Bullet g_Bullets[BULLET_MAX]{};
 static int g_BulletTexId = -1;
@@ -87,14 +87,35 @@ void Bullet_Create(const XMFLOAT2& position)
 {
 	for (Bullet& b : g_Bullets)
 	{
-		if (b.isEnable)continue;
-		//∑¢œ÷ø’µÿ
 
+		if (b.isEnable) continue;
+
+		// ø’§≠ÓI”Ú∞k“ä
 		b.isEnable = true;
-		b.lifeTime = 0.0;
-		b.position = { position.x + 20.0f, position.y };
-
-		b.velocity = { 1400.0f,0.0f };
+		b.lifeTime = 0.0f;
+		b.position = position;
+		b.velocity = { 400.0f, 0.0f };
+		b.collision = { { 16.0f, 16.0f }, 16.0f };
 		break;
 	}
+}
+
+bool Bullet__IsEnable(int index)
+{
+	return g_Bullets[index].isEnable;
+}
+
+Circle Bullet__GetCollision(int index)
+{
+	return Circle();
+}
+
+Circle Bullet_GetCollision(int index)
+{
+	float cx = g_Bullets[index].collision.center.x
+		+ g_Bullets[index].position.x;
+	float cy = g_Bullets[index].collision.center.y
+		+ g_Bullets[index].position.y;
+
+	return { { cx, cy }, g_Bullets[index].collision.radius };
 }

@@ -11,11 +11,15 @@
 using namespace DirectX;
 #include "texture.h"       //Í¼Æ¬¼ÓÔØ
 #include "sprite.h"     //¾«Áé»æÖÆ
+#include "collision.h"
+
 
 struct EnemyType
 {
 	int texId;
 	int tx, ty, tw, th;
+	XMFLOAT2 velocity;
+	Circle collision;
 };
 
 struct Enemy
@@ -29,7 +33,7 @@ struct Enemy
 
 };
 
-static constexpr unsigned int ENEMY_MAX = 256;     //µĞÈË×î´óÊıÁ¿
+
 static Enemy g_Enemys[ENEMY_MAX]{};                //	ËùÓĞµĞÈËÊı×é£¨×î¶à 256 ¸ö£©
 static int g_EnemyTexId = -1;                      //  ¼ÓÔØÌùÍ¼ºóµÄ ID£¬ÓÃÀ´»æÖÆµĞÈËÓÃ
 static constexpr float ENEMY_WIDTH = 64.0f;        //µĞÈËµÄ¿í¶È£¨ÓÃÓÚÅĞ¶¨¡°ÊÇ·ñ³öÆÁÄ»¡±£©
@@ -37,8 +41,8 @@ static constexpr float ENEMY_WIDTH = 64.0f;        //µĞÈËµÄ¿í¶È£¨ÓÃÓÚÅĞ¶¨¡°ÊÇ·ñ³
 
 //µĞÈË²ÃÇĞÎ»ÖÃ
 static EnemyType g_EnemyTypes[] = {
-	{ -1, 32 * 5, 32 * 36, 32, 32 }, // ¡û µÚ 5 ÁĞ£¬µÚ 36 ĞĞ
-	{ -1, 32 * 8 ,32 * 36, 32, 32 }  // ¡û µÚ 8 ÁĞ£¬µÚ 36 ĞĞ
+	{ -1, 32 * 5, 32 * 36, 32, 32, { -200.0f,0.0f },{ { 32.0f,32.0f},32.0f } }, // ¡û µÚ 5 ÁĞ£¬µÚ 36 ĞĞ
+	{ -1, 32 * 8 ,32 * 36, 32, 32, { -400.0f,0.0f },{ { 32.0f,32.0f},32.0f } }  // ¡û µÚ 8 ÁĞ£¬µÚ 36 ĞĞ
 };
 
 
@@ -132,3 +136,24 @@ void Enemy_Create(EnemyTypeID id, const DirectX::XMFLOAT2& position)
 	}
 
 }
+
+bool Enemy__IsEnable(int index)
+{
+	return g_Enemys[index].isEnable;
+}
+
+Circle Enemy__GetCollision(int index)
+{
+	int id = g_Enemys[index].typeId;
+
+	float cx = g_Enemys[index].position.x + g_EnemyTypes[id].collision.center.x;
+	float cy = g_Enemys[index].position.y + g_EnemyTypes[id].collision.center.y;
+
+	return { { cx, cy }, g_EnemyTypes[id].collision.radius };
+}
+
+void Enemy_Destroy(int index)
+{
+}
+
+

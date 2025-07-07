@@ -11,6 +11,9 @@
 #ifndef Enemy_H
 #define Enemy_H
 #include <DirectXMath.h>
+#include "collision.h"
+
+static constexpr unsigned int ENEMY_MAX = 256;     //敌人最大数量
 
 void Enemy_Initialize();
 void Enemy_Finalize();
@@ -29,6 +32,9 @@ enum EnemyTypeID : int
 void Enemy_Create(EnemyTypeID id, const DirectX::XMFLOAT2& position);
 
 
+bool Enemy__IsEnable(int index);
+Circle Enemy__GetCollision(int index);
 
+void Enemy_Destroy(int index);
 
 #endif //Enemy_H
