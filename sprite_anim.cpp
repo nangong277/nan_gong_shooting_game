@@ -22,6 +22,7 @@ struct AnimPlayData
 	int m_PatternId = -1; // アニメショーンパタンID
 	int m_PatternNum = 0; //current pattern  现在生成中的图片 現在再生中のパタン番号
 	double m_accumulated_time = 0.0; //累计时间
+	bool m_IsStopped = false;
 };
 
 static constexpr int ANIM_PATTERN_MAX = 128;
@@ -43,6 +44,7 @@ void SpriteAnim_Initialize()
 	for (AnimPlayData& data : g_AnimPlay)
 	{
 		data.m_PatternId = -1;
+		data.m_IsStopped = false;
 	}
 	/*
 	//g_TextureId = Texture_Load(L"kokosozai.png");
@@ -69,7 +71,7 @@ void SpriteAnim_Finalize()
 {
 
 }
-void SpriteAnimUpdate(double elasped_time)
+void SpriteAnim_Update(double elasped_time)
 {
 	for (int i = 0; i < ANIM_PLAY_MAX; i++)
 	{
@@ -90,6 +92,7 @@ void SpriteAnimUpdate(double elasped_time)
 
 				else {
 					g_AnimPlay[i].m_PatternNum = pAnimPatternData->m_PatternMax - 1;
+					g_AnimPlay[i].m_IsStopped = true;
 				}
 
 				
@@ -170,4 +173,14 @@ int SpriteAnim_CreatePlayer(int anim_pattern_id)
 		return i;
 	}
 	return -1;
+}
+
+bool SpriteAnim_IsStopped(int index)
+{
+	return g_AnimPlay[index].m_IsStopped;
+}
+
+void SpriteAnim_DestroyPlayer(int index)
+{
+	g_AnimPlay[index].m_PatternId = -1;
 }

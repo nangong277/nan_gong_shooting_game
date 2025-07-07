@@ -19,7 +19,7 @@
 void SpriteAnim_Initialize();
 void SpriteAnim_Finalize(void);
 
-void SpriteAnimUpdate(double elapsed_time);
+void SpriteAnim_Update(double elapsed_time);
 void SpriteAnim_Draw(int playid,float dx, float dy, float dw, float dh);
 
 int SpriteAnim_RegisterPattern(
@@ -30,6 +30,7 @@ int SpriteAnim_RegisterPattern(
 	bool is_looped = true);
 
 int SpriteAnim_CreatePlayer(int anim_pattern_id);
+bool SpriteAnim_IsStopped(int index);
+void SpriteAnim_DestroyPlayer(int index);
 
-
-#endif // 
+#endif // SPRITE_ANIM_H

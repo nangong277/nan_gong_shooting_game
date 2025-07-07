@@ -20,7 +20,8 @@ void Bullet_Update(double elapsed_time);
 void Bullet_Draw();
 void Bullet_Create(const DirectX::XMFLOAT2& position);
 
-bool Bullet__IsEnable(int index);
-Circle Bullet__GetCollision(int index);
+bool Bullet_IsEnable(int index);
+Circle Bullet_GetCollision(int index);
+void Bullet_Destroy(int index);
 
 #endif //BULLET_H

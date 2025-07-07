@@ -124,7 +124,7 @@ int APIENTRY WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
 				
 				Game_Update(elapsed_time);
 
-				SpriteAnimUpdate(elapsed_time);
+				SpriteAnim_Update(elapsed_time);
 
 				//ゲームの描画
 				Direct3D_Clear();

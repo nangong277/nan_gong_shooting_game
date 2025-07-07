@@ -1,17 +1,19 @@
-///*====================================================
+ï»¿///*====================================================
 //
 //
-// µĞÈË!  
+// æ•Œäºº!  
 //
 //
 //*====================================================
 
 #include "enemy.h"
-#include <DirectXMath.h>  //ÎªÁËÊ¹ÓÃ XMFLOAT2, XMVECTOR
+#include <DirectXMath.h>  //ä¸ºäº†ä½¿ç”¨ XMFLOAT2, XMVECTOR
 using namespace DirectX;
-#include "texture.h"       //Í¼Æ¬¼ÓÔØ
-#include "sprite.h"     //¾«Áé»æÖÆ
+#include "texture.h"       //å›¾ç‰‡åŠ è½½
+#include "sprite.h"     //ç²¾çµç»˜åˆ¶
 #include "collision.h"
+#include "effect.h"
+
 
 
 struct EnemyType
@@ -20,36 +22,38 @@ struct EnemyType
 	int tx, ty, tw, th;
 	XMFLOAT2 velocity;
 	Circle collision;
+	int hp;
 };
 
 struct Enemy
 {
 	int typeId;
-	XMFLOAT2 position;      //	µĞÈËµÄµ±Ç°Î»ÖÃ
-	XMFLOAT2 velocity;      //	µĞÈËµÄËÙ¶È£¨µ¥Î»ÊÇÏñËØ/Ãë£©
+	XMFLOAT2 position;      //	æ•Œäººçš„å½“å‰ä½ç½®
+	//XMFLOAT2 velocity;      //	æ•Œäººçš„é€Ÿåº¦ï¼ˆå•ä½æ˜¯åƒç´ /ç§’ï¼‰
 	float offsetY;
 	double lifeTime;
-	bool isEnable;          // µĞÈËÊÇ·ñ¼¤»îÖĞ£¨true = ÔÚ³¡£¬false = ¿ÕÏĞ£©
-
+	int hp;
+	bool isEnable;          // æ•Œäººæ˜¯å¦æ¿€æ´»ä¸­ï¼ˆtrue = åœ¨åœºï¼Œfalse = ç©ºé—²ï¼‰
+	bool isDamege;
 };
 
 
-static Enemy g_Enemys[ENEMY_MAX]{};                //	ËùÓĞµĞÈËÊı×é£¨×î¶à 256 ¸ö£©
-static int g_EnemyTexId = -1;                      //  ¼ÓÔØÌùÍ¼ºóµÄ ID£¬ÓÃÀ´»æÖÆµĞÈËÓÃ
-static constexpr float ENEMY_WIDTH = 64.0f;        //µĞÈËµÄ¿í¶È£¨ÓÃÓÚÅĞ¶¨¡°ÊÇ·ñ³öÆÁÄ»¡±£©
+static Enemy g_Enemys[ENEMY_MAX]{};                //	æ‰€æœ‰æ•Œäººæ•°ç»„ï¼ˆæœ€å¤š 256 ä¸ªï¼‰
+static int g_EnemyTexId = -1;                      //  åŠ è½½è´´å›¾åçš„ IDï¼Œç”¨æ¥ç»˜åˆ¶æ•Œäººç”¨
+static constexpr float ENEMY_WIDTH = 64.0f;        //æ•Œäººçš„å®½åº¦ï¼ˆç”¨äºåˆ¤å®šâ€œæ˜¯å¦å‡ºå±å¹•â€ï¼‰
 
 
-//µĞÈË²ÃÇĞÎ»ÖÃ
+//æ•Œäººè£åˆ‡ä½ç½®
 static EnemyType g_EnemyTypes[] = {
-	{ -1, 32 * 5, 32 * 36, 32, 32, { -200.0f,0.0f },{ { 32.0f,32.0f},32.0f } }, // ¡û µÚ 5 ÁĞ£¬µÚ 36 ĞĞ
-	{ -1, 32 * 8 ,32 * 36, 32, 32, { -400.0f,0.0f },{ { 32.0f,32.0f},32.0f } }  // ¡û µÚ 8 ÁĞ£¬µÚ 36 ĞĞ
+	{ -1, 32 * 5, 32 * 36, 32, 32, { -200.0f,0.0f },{ { 32.0f,32.0f},32.0f },10 }, // â† ç¬¬ 5 åˆ—ï¼Œç¬¬ 36 è¡Œ
+	{ -1, 32 * 8 ,32 * 36, 32, 32, { -400.0f,0.0f },{ { 32.0f,32.0f},32.0f }, 2 }  // â† ç¬¬ 8 åˆ—ï¼Œç¬¬ 36 è¡Œ
 };
 
 
 
 
-//ËùÓĞµĞÈË±ê¼ÇÎª¡°Î´ÆôÓÃ¡±
-//¼ÓÔØµĞÈËÌùÍ¼ "Boss.png" ²¢´æÈë g_EnemyTexId
+//æ‰€æœ‰æ•Œäººæ ‡è®°ä¸ºâ€œæœªå¯ç”¨â€
+//åŠ è½½æ•Œäººè´´å›¾ "Boss.png" å¹¶å­˜å…¥ g_EnemyTexId
 
 void Enemy_Initialize()
 {
@@ -66,29 +70,24 @@ void Enemy_Initialize()
 void Enemy_Finalize()
 {
 }
-
 void Enemy_Update(double elapsed_time)
 {
 	for (Enemy& e : g_Enemys)
 	{
 		if (!e.isEnable) continue;
 
-
-
 		switch (e.typeId)
 		{
 		case ENEMY_TYPE_NORMAL:
-			XMVECTOR position = XMLoadFloat2(&e.position);
-			XMVECTOR velocity = XMLoadFloat2(&e.velocity);
-
-			position += velocity * elapsed_time;
-
-			XMStoreFloat2(&e.position, position);
-			XMStoreFloat2(&e.velocity, velocity);
-
+		{
+			XMVECTOR pos = XMLoadFloat2(&e.position);
+			XMVECTOR vel = XMLoadFloat2(&g_EnemyTypes[e.typeId].velocity);
+			pos += vel * elapsed_time;
+			XMStoreFloat2(&e.position, pos);
 			break;
+		}
 		case ENEMY_TYPE_2SHOT:
-			e.position.x += e.velocity.x * elapsed_time;
+			e.position.x += g_EnemyTypes[e.typeId].velocity.x * elapsed_time;
 			e.position.y = e.offsetY + sin(e.lifeTime * 3.0) * 120.f;
 			break;
 		}
@@ -115,34 +114,38 @@ void Enemy_Draw()
 			g_EnemyTypes[e.typeId].tx,
 			g_EnemyTypes[e.typeId].ty,
 			g_EnemyTypes[e.typeId].tw,
-			g_EnemyTypes[e.typeId].th);
+			g_EnemyTypes[e.typeId].th,
+			e.isDamege ? XMFLOAT4{ 1.0f, 1.0f, 0.0f, 1.0f } : XMFLOAT4{ 1.0f, 1.0f, 1.0f, 1.0f }
+		    );
 	}
 }
 
 void Enemy_Create(EnemyTypeID id, const DirectX::XMFLOAT2& position)
 {
-
 	for (Enemy& e : g_Enemys)
 	{
-		if (e.isEnable)continue;
-		//·¢ÏÖ¿ÕµØ
+		if (e.isEnable) continue;
+
+		// å‘ç°ç©ºåœ°
 		e.isEnable = true;
 		e.typeId = id;
 		e.offsetY = position.y;
 		e.position = position;
-		e.velocity = { -160.0f,0.0f };     //¡ú ÉèÖÃµĞÈËµÄËÙ¶ÈÎªÏò×ó¡£
+		//  åˆ é™¤ä¸‹é¢è¿™è¡Œï¼Œä¸è¦åŠ¨æ¨¡æ¿é€Ÿåº¦
+		// g_EnemyTypes[e.typeId].velocity = { -160.0f,0.0f };
 		e.lifeTime = 0.0;
+		e.hp = g_EnemyTypes[e.typeId].hp;
+		e.isDamege = false;
 		break;
 	}
-
 }
 
-bool Enemy__IsEnable(int index)
+bool Enemy_IsEnable(int index)
 {
 	return g_Enemys[index].isEnable;
 }
 
-Circle Enemy__GetCollision(int index)
+Circle Enemy_GetCollision(int index)
 {
 	int id = g_Enemys[index].typeId;
 
@@ -154,6 +157,19 @@ Circle Enemy__GetCollision(int index)
 
 void Enemy_Destroy(int index)
 {
+	g_Enemys[index].isEnable = false;
 }
+
+void Enemy_Damege(int index)
+{
+	g_Enemys[index].hp--;
+	g_Enemys[index].isDamege = true;
+	if (g_Enemys[index].hp <= 0)
+	{
+		g_Enemys[index].isEnable = false;
+		Effect_Create(g_Enemys[index].position);
+	}
+}
+
 
 

@@ -22,7 +22,7 @@ void Player_Initialize(const XMFLOAT2& position)
 {
 	g_PlayerPosition = position;
 	g_PlayerVelocity = { 0.0f , 0.0f };
-	g_playerEnable = ture;
+	g_PlayerEnable = true;
 	g_PlayerTexId = Texture_Load(L"resource/texture/kokosozai.png");
 }
 
@@ -100,5 +100,6 @@ Circle Player_GetCollision()
 void Player_Destroy()
 {
 	g_PlayerEnable = false;
+
 }
-//上面的数值最好定义为constexpr定值}
+

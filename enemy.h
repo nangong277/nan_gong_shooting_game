@@ -32,9 +32,9 @@ enum EnemyTypeID : int
 void Enemy_Create(EnemyTypeID id, const DirectX::XMFLOAT2& position);
 
 
-bool Enemy__IsEnable(int index);
-Circle Enemy__GetCollision(int index);
+bool Enemy_IsEnable(int index);
+Circle Enemy_GetCollision(int index);
 
 void Enemy_Destroy(int index);
-
+void Enemy_Damege(int index);
 #endif //Enemy_H

@@ -4,6 +4,7 @@
 #include "texture.h"
 #include "sprite.h" 
 #include "collision.h" 
+#include "effect.h"
 using namespace DirectX;
 
 
@@ -100,14 +101,14 @@ void Bullet_Create(const XMFLOAT2& position)
 	}
 }
 
-bool Bullet__IsEnable(int index)
+bool Bullet_IsEnable(int index)
 {
 	return g_Bullets[index].isEnable;
 }
 
-Circle Bullet__GetCollision(int index)
+void Bullet_Destroy(int index)
 {
-	return Circle();
+	g_Bullets[index].isEnable = false;
 }
 
 Circle Bullet_GetCollision(int index)
