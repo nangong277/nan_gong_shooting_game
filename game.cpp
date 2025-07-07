@@ -102,6 +102,8 @@ void hitJudgmentPlayerVSEnemy()
 		{
             // ヒット～
 			Player_Destroy();
+			Enemy_Destroy(ei);
+			Effect_Create(Enemy_GetCollision(ei).center);
         }
     }
 }

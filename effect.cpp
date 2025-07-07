@@ -18,6 +18,7 @@ static Effect g_Effects[EFFECT_MAX]{};
 static int g_EffectTexId = -1;
 static int g_AnimPatternId = -1;
 
+//爆炸 用于爆炸效果
 void Effect_Initialize()
 {
     for (Effect& e : g_Effects)
@@ -25,8 +26,8 @@ void Effect_Initialize()
         e.isEnable = false;
     }
 
-    g_EffectTexId = Texture_Load(L"resource/texture/Boss.png");
-    g_AnimPatternId = SpriteAnim_RegisterPattern(g_EffectTexId, 16, 4, 0.05, { 256,256 }, { 0, 0 },false);
+    g_EffectTexId = Texture_Load(L"resource/texture/Explosion.png");
+    g_AnimPatternId = SpriteAnim_RegisterPattern(g_EffectTexId, 16, 4, 0.001, { 256,256 }, { 0, 0 },false);
 
 }
 
@@ -51,7 +52,7 @@ void Effect_Update(double elapsed_time)
     }
 }
 
-void Effect_DraW()
+void Effect_Draw()
 {
     for (Effect& e : g_Effects)
     {
