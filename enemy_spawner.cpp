@@ -47,7 +47,7 @@ void EnemySpawner_Finalize()
 
 void EnemySpawner_Update(double elapsed_time)
 {
-    g_Time = elapsed_time;
+    g_Time += elapsed_time;
     for (int i = 0; i < g_SpawnerCount; i++)
     {
 
