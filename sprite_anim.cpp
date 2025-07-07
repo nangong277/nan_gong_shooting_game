@@ -159,18 +159,16 @@ int SpriteAnim_RegisterPattern(int texid, int pattern_Max,
 	}
 	return -1;
 }
-
 int SpriteAnim_CreatePlayer(int anim_pattern_id)
 {
 	for (int i = 0; i < ANIM_PLAY_MAX; i++)
 	{
 		if (g_AnimPlay[i].m_PatternId >= 0) continue;
-
-		g_AnimPlay[i].m_PatternId = anim_pattern_id;
-		g_AnimPlay[i].m_accumulated_time = 0.0;
-		g_AnimPlay[i].m_PatternNum = 0;
-
-		return i;
+				g_AnimPlay[i].m_PatternId = anim_pattern_id;
+				g_AnimPlay[i].m_accumulated_time = 0.0;
+				g_AnimPlay[i].m_PatternNum = 0;
+				g_AnimPlay[i].m_IsStopped = false; // reset state when reusing slot
+                return i;
 	}
 	return -1;
 }
@@ -183,4 +181,5 @@ bool SpriteAnim_IsStopped(int index)
 void SpriteAnim_DestroyPlayer(int index)
 {
 	g_AnimPlay[index].m_PatternId = -1;
+	g_AnimPlay[index].m_IsStopped = false;
 }
